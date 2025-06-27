@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class Program {
-    public static void main(String[] args) throws ParseException { //MEU METODO MAIN PODE LANCAR ESSA EXCEÇÃO
+    public static void main(String[] args) throws ParseException { //METODO MAIN PODE LANCAR ESSA EXCEÇÃO
 
         Scanner sc = new Scanner(System.in);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -21,7 +21,7 @@ public class Program {
         System.out.print("Check-out date (dd/MM/yyyy): ");
         Date checkoutDate = sdf.parse(sc.next());
 
-        if (!checkoutDate.after(checkinDate)) { //VERY BAD SOLUTION
+        if (!checkoutDate.after(checkinDate)) { //BAD SOLUTION (ESSA CHECAGEM PRECISARIA ESTAR NO CONSTRUTOR, MAS CONSTRUTOR NÃO RETORNA STRING)
             System.out.println("\nError in reservation: Check-out date must be after check-in date");
         }else{
             Reservation reservation = new Reservation (roomNumber, checkinDate, checkoutDate);
@@ -33,13 +33,10 @@ public class Program {
             System.out.print("Check-out date (dd/MM/yyyy): ");
             checkoutDate = sdf.parse(sc.next());
 
-            Date now = new Date();
-            if(checkinDate.before(now) || checkoutDate.after(now)) {
-                System.out.println("\nError in reservation: Reservation dates for update must be future date");
-            }else if (!checkoutDate.after(checkinDate)){
-                System.out.println("\nError in reservation: Check-out date must be after check-in date");
+            String error = reservation.updateDates(checkinDate, checkoutDate);
+            if (error != null) {
+                System.out.println("Error in reservation: " + error);
             }else {
-                reservation.updateDates(checkinDate, checkoutDate);
                 System.out.print("\nReservation: " + reservation);
             }
         }

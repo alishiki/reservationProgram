@@ -45,9 +45,17 @@ public class Reservation {
         return TimeUnit.DAYS.convert(differenceTime, TimeUnit.MILLISECONDS); // converte milisec em dias
     }
 
-    public void updateDates(Date checkin, Date checkout){
+    public String updateDates(Date checkin, Date checkout){
+        Date now = new Date();
+        if(checkin.before(now) || checkout.before(now)) {
+            return "\nReservation dates for update must be future date";
+        }
+        if (!checkout.after(checkin)) {
+            return "\nCheck-out date must be after check-in date";
+        }
         this.checkin = checkin;
         this.checkout = checkout;
+        return null; // RETORNARNDO NULL INDICA QUE NÃO TEVE ERRO
     }
 
     @Override
